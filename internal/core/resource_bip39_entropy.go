@@ -2,17 +2,18 @@ package core
 
 import (
 	"fmt"
+	"provider/internal/randstring"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/tyler-smith/go-bip39"
 )
 
-func resourceRandomEntropy() *schema.Resource {
+func resourceBip39Entropy() *schema.Resource {
 	return &schema.Resource{
-		Create: onRandomEntropyCreate,
-		Read:   onRandomEntropyRead,
-		Update: onRandomEntropyUpdate,
-		Delete: onRandomEntropyDelete,
+		Create: onBip39EntropyCreate,
+		Read:   onBip39EntropyRead,
+		Update: onBip39EntropyUpdate,
+		Delete: onBip39EntropyDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -21,7 +22,6 @@ func resourceRandomEntropy() *schema.Resource {
 			"bit_size": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				Default:     128,
 				Description: "bit size for the entropy has to be a multiple 32 and be within the inclusive range of (128, 256).",
 			},
 			"mnemonic": {
@@ -38,7 +38,7 @@ func resourceRandomEntropy() *schema.Resource {
 	}
 }
 
-func onRandomEntropyCreate(d *schema.ResourceData, m interface{}) error {
+func onBip39EntropyCreate(d *schema.ResourceData, m interface{}) error {
 	bitSize := d.Get("bit_size").(int)
 	entropy, err := bip39.NewEntropy(bitSize)
 	if err != nil {
@@ -51,20 +51,21 @@ func onRandomEntropyCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	d.Set("mnemonic", mnemonic)
+	d.SetId(randstring.New(16))
 	return nil
 }
 
-func onRandomEntropyRead(d *schema.ResourceData, m interface{}) error {
+func onBip39EntropyRead(d *schema.ResourceData, m interface{}) error {
 	// no actions here. only creation does something
 	return nil
 }
 
-func onRandomEntropyUpdate(d *schema.ResourceData, m interface{}) error {
+func onBip39EntropyUpdate(d *schema.ResourceData, m interface{}) error {
 	// no actions here. only creation does something
 	return nil
 }
 
-func onRandomEntropyDelete(d *schema.ResourceData, m interface{}) error {
+func onBip39EntropyDelete(d *schema.ResourceData, m interface{}) error {
 	// no actions here. only creation does something
 	return nil
 }

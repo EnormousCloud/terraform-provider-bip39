@@ -14,7 +14,7 @@ func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{}, // no parameters for provider
 		ResourcesMap: map[string]*schema.Resource{
-			"random_entropy": resourceRandomEntropy(),
+			"bip39_entropy": resourceBip39Entropy(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{},
 		ConfigureFunc:  providerConfigure,
