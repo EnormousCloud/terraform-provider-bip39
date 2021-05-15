@@ -2,7 +2,7 @@ VERSION=0.0.1
 all: build install
 
 test:
-	TF_LOG=WARN TF_ACC=true go test -v ./...
+	TF_LOG=WARN TF_ACC=true go test -count=1 -v ./...
 
 build:
 	mkdir -p ./bin
